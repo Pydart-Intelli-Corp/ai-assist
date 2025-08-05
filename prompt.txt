@@ -226,7 +226,7 @@ WEAVIATE_URL="chmjnz2nq6wviibztt7chg.c0.asia-southeast1.gcp.weaviate.cloud"
 WEAVIATE_API_KEY="QTRpTHdkcytOWWFqVW9CeV91UmZmMlNlcytFZUxlcVA5aFo4WjBPRHFOdlNtOU9qaDFxOG12eTJSYW9nPV92MjAw"
 GOOGLE_API_KEY="AIzaSyB1Cr_w2ioWBlDgSWlkMjYRFPzxAq_AkLc"
 GEMINI_MODEL="gemini-2.5-flash-lite"
-MySQL: server=RDP-Main-Server;database=psrapp;user id=root;password=123@456
+
 SMTP: Host=smtp.gmail.com;Port=587;Username=info.pydart@gmail.com;Password=rjif lojs pzbq bdcz;EnableSSL=true
 Enhanced Technology Stack:
 Core Technologies:

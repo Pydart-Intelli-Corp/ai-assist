@@ -36,10 +36,10 @@ async def create_database_if_not_exists():
         
         # Connection parameters
         connection_params = {
-            'host': 'psrazuredb.mysql.database.azure.com',
+            'host': 'localhost',
             'port': 3306,
-            'user': 'psrcloud',
-            'password': 'Access@LRC2404',  # Direct password without encoding
+            'user': 'root',
+            'password': '2232',  # Direct password without encoding
             'charset': 'utf8mb4',
             'autocommit': True
         }

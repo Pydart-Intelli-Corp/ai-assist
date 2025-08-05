@@ -4,6 +4,7 @@ Simple database connection test for POORNASREE AI Platform
 # pylint: disable=no-member
 import asyncio
 import logging
+import pytest
 from sqlalchemy import create_engine, text
 from app.core.config import settings
 
@@ -11,6 +12,7 @@ from app.core.config import settings
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+@pytest.mark.asyncio
 async def test_database_connection():
     """Test basic database connection"""
     try:

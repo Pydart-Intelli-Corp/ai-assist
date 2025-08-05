@@ -17,6 +17,7 @@ from app.core.security import security_manager, get_user_role
 from app.core.config import settings, UserRole, KnowledgeBaseTier
 from app.models.user import User, UserQuery, UserRoleEnum
 from app.models.knowledge_base import Document, KnowledgeBaseTierEnum, DocumentStatusEnum
+from app.services.ai_service import ai_service
 from app.api.query.schemas import (
     QueryRequest,
     QueryResponse,
@@ -40,7 +41,7 @@ async def get_current_user(
 ) -> User:
     """Get current authenticated user"""
     try:
-        payload = security_manager.verify_access_token(credentials.credentials)
+        payload = security_manager.verify_token(credentials.credentials)
         user_id = payload.get("sub")
         
         if not user_id:
@@ -71,7 +72,7 @@ def determine_knowledge_base_tier(user_role: UserRoleEnum) -> KnowledgeBaseTierE
     role_to_tier = {
         UserRoleEnum.CUSTOMER: KnowledgeBaseTierEnum.CUSTOMER,
         UserRoleEnum.ENGINEER: KnowledgeBaseTierEnum.ENGINEER,
-        UserRoleEnum.ADMIN: KnowledgeBaseTierEnum.MASTER
+        UserRoleEnum.ADMIN: KnowledgeBaseTierEnum.ADMIN
     }
     return role_to_tier.get(user_role, KnowledgeBaseTierEnum.CUSTOMER)
 
@@ -110,19 +111,16 @@ async def process_query(
         db.commit()
         db.refresh(user_query)
         
-        # TODO: Implement AI processing logic here
-        # For now, return a placeholder response
-        ai_response = await process_ai_query(
+        # Process query using AI service
+        ai_result = await ai_service.process_query(
             query=request.query,
-            kb_tier=kb_tier,
-            user_role=current_user.role,
-            language=request.language or "en",
-            context=request.context
+            user_role=current_user.role.value,
+            knowledge_base_tier=kb_tier.value
         )
         
         # Update query with response
-        user_query.ai_response = ai_response
-        user_query.response_time = (datetime.utcnow() - user_query.created_at).total_seconds()
+        user_query.ai_response = ai_result.get("response", "No response generated")
+        user_query.response_time = ai_result.get("processing_time", 0.0)
         user_query.status = "completed"
         
         db.commit()
@@ -131,12 +129,12 @@ async def process_query(
         
         return QueryResponse(
             query_id=user_query.id,
-            response=ai_response,
-            confidence_score=0.85,  # TODO: Calculate actual confidence
-            sources=[],  # TODO: Add relevant document sources
-            response_time=user_query.response_time,
+            response=ai_result.get("response", "No response generated"),
+            confidence_score=ai_result.get("confidence", 0.5),
+            sources=ai_result.get("sources", []),
+            response_time=ai_result.get("processing_time", 0.0),
             knowledge_base_tier=kb_tier.value,
-            suggestions=await get_query_suggestions(request.query, kb_tier, db)
+            suggestions=await get_query_suggestions(request.query, current_user.role, db)
         )
         
     except HTTPException:
@@ -247,48 +245,64 @@ async def search_knowledge_base(
         )
 
 
-async def process_ai_query(
-    query: str,
-    kb_tier: KnowledgeBaseTierEnum,
-    user_role: UserRoleEnum,
-    language: str = "en",
-    context: Optional[Dict[str, Any]] = None
-) -> str:
-    """
-    Process query using AI services (placeholder implementation)
-    TODO: Integrate with Google Gemini and Weaviate
-    """
-    # Placeholder AI response based on user role and knowledge base tier
-    role_responses = {
-        UserRoleEnum.CUSTOMER: f"Based on our customer knowledge base, here's what I found regarding '{query}': This appears to be a common inquiry. I recommend checking our troubleshooting guide for step-by-step instructions.",
-        UserRoleEnum.ENGINEER: f"Technical analysis for '{query}': Based on engineering documentation and best practices, this issue typically requires diagnostic procedures. Please refer to the technical manual section 4.2 for detailed troubleshooting steps.",
-        UserRoleEnum.ADMIN: f"Administrative insight for '{query}': This query requires system-level analysis. Based on master knowledge base and system metrics, I recommend reviewing configuration settings and performance logs."
-    }
-    
-    base_response = role_responses.get(user_role, "I'll help you with that query.")
-    
-    # Add language-specific response
-    if language == "hi":
-        base_response += "\n\nहिंदी सहायता: अधिक जानकारी के लिए कृपया तकनीकी सहायता टीम से संपर्क करें।"
-    
-    return base_response
-
-
 async def get_query_suggestions(
     query: str,
-    kb_tier: KnowledgeBaseTierEnum,
+    user_role: UserRoleEnum,
     db: Session
 ) -> List[str]:
     """
-    Get related query suggestions (placeholder implementation)
-    TODO: Implement ML-based suggestion engine
+    Get related query suggestions using AI service
     """
-    # Simple keyword-based suggestions for now
-    suggestions = [
-        f"How to troubleshoot {query.split()[-1] if query.split() else 'issue'}?",
-        f"Best practices for {query.split()[0] if query.split() else 'maintenance'}",
-        "Common solutions and fixes",
-        "Related documentation and guides"
-    ]
+    try:
+        # Get recent queries from same user role for context
+        recent_queries = db.query(UserQuery.query_text)\
+            .join(User)\
+            .filter(User.role == user_role)\
+            .filter(UserQuery.status == "completed")\
+            .order_by(desc(UserQuery.created_at))\
+            .limit(10)\
+            .all()
+        
+        # Use AI service to generate contextual suggestions
+        context_queries = [q[0] for q in recent_queries if q[0] != query]
+        
+        # Generate suggestions based on query keywords and role
+        query_words = query.lower().split()
+        role_based_suggestions = {
+            UserRoleEnum.CUSTOMER: [
+                f"How to {' '.join(query_words[:2])}?",
+                f"Troubleshooting {query_words[-1] if query_words else 'issues'}",
+                "Step-by-step instructions",
+                "Common problems and solutions"
+            ],
+            UserRoleEnum.ENGINEER: [
+                f"Technical analysis of {' '.join(query_words[:2])}",
+                f"Diagnostic procedures for {query_words[-1] if query_words else 'equipment'}",
+                "Maintenance protocols",
+                "Performance optimization"
+            ],
+            UserRoleEnum.ADMIN: [
+                f"System configuration for {' '.join(query_words[:2])}",
+                f"Administrative controls for {query_words[-1] if query_words else 'system'}",
+                "User management and permissions",
+                "Analytics and reporting"
+            ]
+        }
+        
+        return role_based_suggestions.get(user_role, [
+            "General troubleshooting",
+            "Best practices",
+            "Documentation guides",
+            "Support resources"
+        ])
+        
+    except Exception as e:
+        logger.error(f"Failed to generate suggestions: {e}")
+        return [
+            "Related topics",
+            "Troubleshooting guides", 
+            "Best practices",
+            "Documentation"
+        ]
     
     return suggestions[:3]  # Return top 3 suggestions

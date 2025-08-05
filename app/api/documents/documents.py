@@ -96,7 +96,7 @@ def determine_knowledge_base_tier(user_role: UserRoleEnum) -> KnowledgeBaseTierE
     role_to_tier = {
         UserRoleEnum.CUSTOMER: KnowledgeBaseTierEnum.CUSTOMER,
         UserRoleEnum.ENGINEER: KnowledgeBaseTierEnum.ENGINEER,
-        UserRoleEnum.ADMIN: KnowledgeBaseTierEnum.MASTER
+        UserRoleEnum.ADMIN: KnowledgeBaseTierEnum.ADMIN
     }
     return role_to_tier.get(user_role, KnowledgeBaseTierEnum.CUSTOMER)
 
@@ -254,7 +254,7 @@ async def list_documents(
     offset: int = 0,
     category: Optional[str] = None,
     document_type: Optional[DocumentTypeEnum] = None,
-    status: Optional[DocumentStatusEnum] = None,
+    document_status: Optional[DocumentStatusEnum] = None,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -276,8 +276,8 @@ async def list_documents(
         if document_type:
             query = query.filter(Document.file_type == document_type)
         
-        if status:
-            query = query.filter(Document.status == status)
+        if document_status:
+            query = query.filter(Document.status == document_status)
         
         # Get total count
         total_count = query.count()

@@ -33,7 +33,9 @@ class Settings(BaseSettings):
     
     # Weaviate Configuration
     weaviate_url: str = Field(alias="WEAVIATE_URL")
+    weaviate_grpc_url: Optional[str] = Field(default=None, alias="WEAVIATE_GRPC_URL")
     weaviate_api_key: str = Field(alias="WEAVIATE_API_KEY")
+    weaviate_cluster_name: Optional[str] = Field(default=None, alias="WEAVIATE_CLUSTER_NAME")
     
     # Google AI Configuration
     google_api_key: str = Field(alias="GOOGLE_API_KEY")
