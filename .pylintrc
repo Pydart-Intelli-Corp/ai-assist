@@ -1,0 +1,58 @@
+[MASTER]
+# Add files or directories to the blacklist
+ignore=migrations,venv,env,.venv,.env
+
+# Add the current directory to Python path for import resolution
+init-hook='import sys; sys.path.append(".")'
+
+[MESSAGES CONTROL]
+# Disable specific warnings
+disable=
+    E1101,  # no-member (for Pydantic fields and SQLAlchemy)
+    E1102,  # not-callable (for func.now())
+    E0213,  # no-self-argument (for Pydantic validators)
+    E0401,  # import-error (for complex imports)
+    C0103,  # invalid-name (for database variables and SQLAlchemy naming)
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    C0121,  # singleton-comparison
+    C0303,  # trailing-whitespace
+    C0411,  # wrong-import-order
+    C0415,  # import-outside-toplevel (for conditional imports)
+    R0903,  # too-few-public-methods (for Pydantic models)
+    R0913,  # too-many-arguments
+    R0917,  # too-many-positional-arguments (for FastAPI endpoints)
+    R1705,  # no-else-return
+    C0301,  # line-too-long
+    W0511,  # fixme (for TODO comments)
+    W0611,  # unused-import
+    W0613,  # unused-argument (for FastAPI dependencies)
+    W0621,  # redefined-outer-name (for pytest fixtures)
+    W0707,  # raise-missing-from
+    W0718,  # broad-exception-caught
+    W1203,  # logging-fstring-interpolation
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=120
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=10
+# Maximum number of locals for function / method body
+max-locals=20
+# Maximum number of return / yield for function / method body
+max-returns=8
+# Maximum number of branch for function / method body
+max-branches=15
+# Maximum number of statements in function / method body
+max-statements=60
+
+[BASIC]
+# Good variable names which should always be accepted
+good-names=i,j,k,ex,Run,_,id,db,app
+
+[TYPECHECK]
+# List of members which are set dynamically and missed by pylint inference
+generated-members=sqlalchemy.*,pydantic.*
