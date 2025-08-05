@@ -18,6 +18,7 @@ from app.core.database import init_db, close_db
 from app.api.auth.auth import router as auth_router
 from app.api.query.query import router as query_router
 from app.api.documents.documents import router as documents_router
+from app.api.training.training import router as training_router
 
 # Configure logging
 logging.basicConfig(
@@ -191,9 +192,9 @@ async def root():
 app.include_router(auth_router, prefix=f"/{settings.api_version}")
 app.include_router(query_router, prefix=f"/{settings.api_version}")
 app.include_router(documents_router, prefix=f"/{settings.api_version}")
+app.include_router(training_router, prefix=f"/{settings.api_version}")
 
 # Future routers will be added here
-# app.include_router(training_router, prefix=f"/{settings.api_version}")
 # app.include_router(analytics_router, prefix=f"/{settings.api_version}")
 # app.include_router(admin_router, prefix=f"/{settings.api_version}")
 

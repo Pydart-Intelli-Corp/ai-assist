@@ -74,12 +74,12 @@ def test_query_endpoint_basic(client, auth_headers):
     
     # Check response structure
     assert "response" in data
-    assert "confidence" in data
-    assert "processing_time" in data
+    assert "confidence_score" in data
+    assert "response_time" in data
     
     # Check that we got a meaningful response
     assert len(data["response"]) > 0
-    assert data["confidence"] > 0
+    assert data["confidence_score"] > 0
 
 def test_query_different_roles(client, auth_headers):
     """Test query processing with engineer role"""
@@ -97,7 +97,7 @@ def test_query_different_roles(client, auth_headers):
     assert response.status_code == 200
     data = response.json()
     assert "response" in data
-    assert "confidence" in data
+    assert "confidence_score" in data
 
 def test_query_different_languages(client, auth_headers):
     """Test query processing with different languages"""
@@ -155,7 +155,7 @@ def test_query_performance(client, auth_headers):
     
     # Check response structure
     assert "response" in data
-    assert "processing_time" in data
+    assert "response_time" in data
     
     # Verify reasonable performance (under 120 seconds for real AI)
     assert processing_time < 120

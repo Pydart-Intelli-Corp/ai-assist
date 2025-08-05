@@ -15,7 +15,7 @@ from sqlalchemy import desc
 from app.core.database import get_db
 from app.core.security import security_manager, get_user_role
 from app.core.config import settings, UserRole, KnowledgeBaseTier
-from app.models.user import User, UserQuery, UserRoleEnum
+from app.models.user import User, UserQuery, UserRoleEnum, LanguageEnum
 from app.models.knowledge_base import Document, KnowledgeBaseTierEnum, DocumentStatusEnum
 from app.services.ai_service import ai_service
 from app.api.query.schemas import (
@@ -97,11 +97,12 @@ async def process_query(
         user_query = UserQuery(
             user_id=current_user.id,
             query_text=request.query,
+            query_language=LanguageEnum.ENGLISH if (request.language or "en") == "en" else LanguageEnum.HINDI,
             query_type=request.query_type,
-            knowledge_base_tier=kb_tier,
-            query_metadata={
-                "ip_address": req.client.host if req.client else None,
-                "user_agent": req.headers.get("user-agent"),
+            knowledge_base_tier=kb_tier.value,
+            ip_address=req.client.host if req.client else None,
+            user_agent=req.headers.get("user-agent"),
+            device_info={
                 "language": request.language or "en",
                 "context": request.context
             }
@@ -119,9 +120,11 @@ async def process_query(
         )
         
         # Update query with response
-        user_query.ai_response = ai_result.get("response", "No response generated")
-        user_query.response_time = ai_result.get("processing_time", 0.0)
-        user_query.status = "completed"
+        user_query.response_text = ai_result.get("response", "No response generated")
+        user_query.response_language = LanguageEnum.ENGLISH if (request.language or "en") == "en" else LanguageEnum.HINDI
+        user_query.processing_time_ms = int(ai_result.get("processing_time", 0.0) * 1000)  # Convert to milliseconds
+        user_query.responded_at = datetime.utcnow()
+        user_query.documents_referenced = ai_result.get("sources", [])
         
         db.commit()
         
@@ -258,7 +261,7 @@ async def get_query_suggestions(
         recent_queries = db.query(UserQuery.query_text)\
             .join(User)\
             .filter(User.role == user_role)\
-            .filter(UserQuery.status == "completed")\
+            .filter(UserQuery.response_text.isnot(None))\
             .order_by(desc(UserQuery.created_at))\
             .limit(10)\
             .all()

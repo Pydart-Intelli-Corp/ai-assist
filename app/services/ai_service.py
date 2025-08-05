@@ -230,7 +230,8 @@ class AIService:
                 sources.append({
                     "document_id": doc.get('doc_id'),
                     "title": doc.get('title', 'Untitled'),
-                    "relevance_score": doc.get('relevance_score', 0.5)
+                    "relevance_score": doc.get('relevance_score', 0.5),
+                    "content_preview": (doc.get('content', '')[:150] + "...") if len(doc.get('content', '')) > 150 else doc.get('content', '')
                 })
             
             # Create prompt based on user role
