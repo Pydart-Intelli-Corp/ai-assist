@@ -1,0 +1,262 @@
+POORNASREE AI Platform - Complete Development & Debugging Guide (v2.0)
+Project Overview & Logic
+Project Name & Branding
+POORNASREE AI - A comprehensive, white-label AI platform that replicates ChatGPT/Perplexity.ai UX/UI experience while being fully customizable for different clients. This is a production-ready SaaS solution that can be sold to companies with complete branding and functionality customization, specializing in machine maintenance and technical support through AI-powered assistance.
+
+Complete Project Logic Explanation
+
+1. Enhanced Multi-Tiered Knowledge Base Architecture
+   The POORNASREE AI platform implements a sophisticated three-tier knowledge base system optimized for machine maintenance and technical support:
+
+Tier 1 - Customer Knowledge Base:
+Contains end-user manuals, FAQs, basic troubleshooting guides
+Machine operation instructions, safety protocols
+Basic maintenance schedules and procedures
+Accessible to ALL users (authenticated and unauthenticated)
+Primary source for customer-facing support questions
+Trained on customer-friendly documentation in both English and Hindi
+Supports audio input/output for hands-free operation
+Tier 2 - Service Engineer Knowledge Base:
+Contains technical documentation, advanced troubleshooting guides
+Detailed repair manuals, diagnostic procedures
+Parts catalogs, wiring diagrams, service bulletins
+Accessible ONLY to authenticated engineers and admins
+Provides deep technical insights for complex maintenance issues
+Trained on service manuals, repair guides, diagnostic procedures
+Multi-language support with technical terminology preservation
+Tier 3 - Admin Knowledge Base:
+Full access to both Customer and Engineer knowledge bases
+Plus additional admin-specific controls and documentation
+System administration, configuration guides
+Training data management and model optimization controls
+Analytics and reporting capabilities
+Accessible ONLY to authenticated admins
+2. Advanced Document Training & Model Management
+Intelligent Document Processing:
+Multi-format Support: PDF, DOC, DOCX, TXT, Images (OCR), Audio files
+Automatic Content Classification: AI-powered categorization into Customer/Engineer tiers
+Manual Override: Admin can reassign documents to different knowledge base tiers
+Language Detection: Automatic detection of English/Hindi content
+Quality Validation: Document completeness and relevance scoring
+Training Pipeline:
+Upload Document → Language Detection → Content Analysis →
+Auto-Classification → Admin Review → Knowledge Base Assignment →
+Vector Embedding → Model Training → Validation → Deployment
+Model Training Features:
+Batch Training: Process multiple documents simultaneously
+Incremental Learning: Add new knowledge without full retraining
+A/B Testing: Compare model versions before deployment
+Training Progress Tracking: Real-time status and ETA
+Rollback Capability: Revert to previous model versions
+3. Enhanced Authentication & Authorization Logic
+Admin Authentication Flow:
+Admin enters the hard-coded core Gmail address (white-label configurable)
+Multi-factor authentication with OTP + Security Questions
+System validates against configured admin core Gmail
+Enhanced session management with configurable timeout
+Role-based dashboard access with granular permissions
+Engineer Registration & Enhanced Approval Flow:
+Detailed Registration Form:
+Professional credentials and certifications
+Machine expertise areas and experience levels
+Language preferences (English/Hindi/Both)
+Department and reporting structure
+Automated Background Verification: Integration with professional databases
+Approval Workflow: Multi-level approval for enterprise clients
+Training Requirements: Mandatory training modules before access
+Multi-Language Authentication:
+Interface available in English and Hindi
+Audio-guided authentication for accessibility
+Voice OTP delivery option for hands-free scenarios
+4. Advanced AI Query Routing & Response Logic
+Enhanced Query Processing:
+User Query (Text/Audio) → Language Detection → Intent Analysis →
+Authentication Check → Knowledge Base Access Level →
+RAG Processing → Response Generation →
+Language Translation (if needed) → Text/Audio Output
+Smart Response Features:
+Contextual Understanding: Machine-specific context awareness
+Error Pattern Recognition: Identify recurring issues
+Escalation Logic: Automatic escalation for complex problems
+Learning from Interactions: Continuous improvement from user feedback
+Audio Integration:
+Speech-to-Text: Convert voice queries to text (English/Hindi)
+Text-to-Speech: Convert AI responses to natural speech
+Noise Filtering: Background noise reduction for industrial environments
+Offline Capability: Basic audio processing without internet
+5. Professional Analytics & Reporting Dashboard
+Machine-Specific Analytics:
+Error Pattern Analysis:
+
+Most frequent error codes by machine type
+Trending failure patterns over time
+Seasonal maintenance patterns
+Component failure predictions
+Knowledge Gap Identification:
+
+Questions without satisfactory answers
+Areas requiring additional documentation
+Training material effectiveness metrics
+User Behavior Analytics:
+Customer Analytics:
+
+Most searched topics
+Common troubleshooting paths
+Self-service success rates
+Regional usage patterns
+Engineer Analytics:
+
+Resolution time improvements
+Knowledge base utilization
+Skill gap identification
+Performance benchmarking
+Business Intelligence Reports:
+Maintenance Efficiency Metrics:
+
+Mean Time to Resolution (MTTR)
+First Call Resolution rates
+Knowledge base ROI analysis
+Training effectiveness scores
+Predictive Analytics:
+
+Maintenance schedule optimization
+Parts inventory predictions
+Engineer workload balancing
+Customer satisfaction trends
+6. White-Label Customization & Feature Control
+Advanced Branding Controls:
+Visual Customization:
+
+Logo, colors, fonts, themes (Dark/Light modes)
+Custom CSS injection capability
+Branded email templates
+Mobile app icon and splash screens
+Feature Toggle Matrix:
+
+Feature                 | Customer | Engineer | Admin | White-Label Control
+Audio Input/Output      |    ✓     |    ✓     |   ✓   |       ✓
+Multi-Language Support  |    ✓     |    ✓     |   ✓   |       ✓
+Dark/Light Mode        |    ✓     |    ✓     |   ✓   |       ✓
+Analytics Dashboard    |    ✗     |    ✓     |   ✓   |       ✓
+Model Training         |    ✗     |    ✗     |   ✓   |       ✓
+User Management        |    ✗     |    ✗     |   ✓   |       ✓
+API Access            |    ✗     |    ✓     |   ✓   |       ✓
+Offline Mode          |    ✓     |    ✓     |   ✓   |       ✓
+Client-Specific Configurations:
+Industry Adaptations: Manufacturing, Healthcare, Automotive, etc.
+Compliance Requirements: GDPR, HIPAA, ISO standards
+Integration Capabilities: ERP, CRM, ITSM systems
+Custom Workflows: Client-specific approval processes
+7. Enhanced User Experience Features
+Modern Interface Design:
+Responsive Design: Mobile-first approach with progressive enhancement
+Dark/Light Mode: System preference detection with manual override
+Accessibility: WCAG 2.1 AA compliance, screen reader support
+Voice Navigation: Complete hands-free operation capability
+Multi-Language Support:
+Comprehensive Localization:
+UI elements in English and Hindi
+Technical terminology preservation
+Cultural context adaptation
+Regional number and date formats
+Audio Experience:
+Natural Voice Synthesis: High-quality TTS in both languages
+Voice Commands: Complete voice control interface
+Audio Feedback: Confirmation sounds and audio notifications
+Hands-Free Mode: Optimized for industrial environments
+8. Professional Project Structure
+poornasree-ai-platform/
+├── frontend/                    # Next.js React Frontend
+│   ├── components/
+│   │   ├── common/             # Reusable components
+│   │   ├── auth/               # Authentication components
+│   │   ├── dashboard/          # Dashboard components
+│   │   ├── training/           # Model training interface
+│   │   ├── analytics/          # Analytics components
+│   │   └── audio/              # Audio input/output components
+│   ├── pages/
+│   │   ├── api/                # API routes
+│   │   ├── auth/               # Authentication pages
+│   │   ├── dashboard/          # Dashboard pages
+│   │   ├── training/           # Training interface
+│   │   └── analytics/          # Analytics pages
+│   ├── hooks/                  # Custom React hooks
+│   ├── utils/                  # Utility functions
+│   ├── styles/                 # Styling (Tailwind CSS)
+│   ├── locales/               # i18n translations
+│   └── config/                # Configuration files
+├── backend/                    # FastAPI Backend
+│   ├── app/
+│   │   ├── api/               # API endpoints
+│   │   │   ├── auth/          # Authentication endpoints
+│   │   │   ├── training/      # Model training endpoints
+│   │   │   ├── analytics/     # Analytics endpoints
+│   │   │   └── query/         # Query processing endpoints
+│   │   ├── core/              # Core functionality
+│   │   │   ├── auth.py        # Authentication logic
+│   │   │   ├── security.py    # Security utilities
+│   │   │   ├── config.py      # Configuration management
+│   │   │   └── database.py    # Database connections
+│   │   ├── models/            # Database models
+│   │   ├── services/          # Business logic services
+│   │   │   ├── ai_service.py  # AI query processing
+│   │   │   ├── training_service.py # Model training
+│   │   │   ├── analytics_service.py # Analytics processing
+│   │   │   └── audio_service.py # Audio processing
+│   │   ├── utils/             # Utility functions
+│   │   └── workers/           # Background tasks (Celery)
+├── ai-engine/                  # AI Processing Engine
+│   ├── embeddings/            # Vector embedding generation
+│   ├── retrieval/             # RAG implementation
+│   ├── generation/            # Response generation
+│   ├── training/              # Model training pipelines
+│   └── audio/                 # Audio processing
+├── database/                   # Database schema and migrations
+│   ├── migrations/            # Database migrations
+│   ├── seeds/                 # Seed data
+│   └── schemas/               # Database schemas
+├── docker/                     # Docker configurations
+├── docs/                       # Documentation
+├── tests/                      # Test suites
+├── scripts/                    # Deployment and utility scripts
+└── config/                     # Environment configurations
+Technology Stack Requirements
+Current Configuration:
+WEAVIATE_URL="chmjnz2nq6wviibztt7chg.c0.asia-southeast1.gcp.weaviate.cloud"
+WEAVIATE_API_KEY="QTRpTHdkcytOWWFqVW9CeV91UmZmMlNlcytFZUxlcVA5aFo4WjBPRHFOdlNtOU9qaDFxOG12eTJSYW9nPV92MjAw"
+GOOGLE_API_KEY="AIzaSyB1Cr_w2ioWBlDgSWlkMjYRFPzxAq_AkLc"
+GEMINI_MODEL="gemini-2.5-flash-lite"
+MySQL: server=RDP-Main-Server;database=psrapp;user id=root;password=123@456
+SMTP: Host=smtp.gmail.com;Port=587;Username=info.pydart@gmail.com;Password=rjif lojs pzbq bdcz;EnableSSL=true
+Enhanced Technology Stack:
+Core Technologies:
+Vector Database: Weaviate (knowledge base storage and similarity search)
+LLM: Google Gemini API (AI response generation with multi-language support)
+Database: MySQL (user data, sessions, audit logs, analytics)
+Message Queue: Redis + Celery (background tasks and model training)
+SMTP: Gmail (OTP delivery and notifications)
+Frontend Technologies:
+Framework: Next.js 14+ with App Router
+UI Library: React 18+ with TypeScript
+Styling: Tailwind CSS + Material-UI components
+State Management: Zustand + React Query
+Audio: Web Audio API + Speech Recognition API
+Internationalization: next-i18next
+Theme: next-themes for dark/light mode
+Backend Technologies:
+API Framework: FastAPI with async support
+ORM: SQLAlchemy with Alembic migrations
+Authentication: JWT + OTP with secure session management
+Background Tasks: Celery with Redis broker
+File Processing: PyPDF2, python-docx, pytesseract (OCR)
+Audio Processing: SpeechRecognition, pydub, gTTS
+AI Integration: LangChain for RAG implementation
+Infrastructure & DevOps:
+Containerization: Docker + Docker Compose
+Reverse Proxy: Nginx with SSL termination
+Monitoring: Prometheus + Grafana
+Logging: ELK Stack (Elasticsearch, Logstash, Kibana)
+CI/CD: GitHub Actions
+Cloud: Multi-cloud deployment support (AWS, GCP, Azure)
+
+initially build foundation and build api step by step after testing each step ,go for next step. build frontend  only after building api core funtionalities and after thier complete testing endpoints
